@@ -15,23 +15,32 @@ namespace QwiikTechnicalTest.Services
 
         public async Task<List<CustomerResponseDTO>?> GetListDataCustomer(ListCustomerRequest request)
         {
-            var customers = await _customerRepository.GetListDataCustomer(request);
-            if (customers.Count == 0)
+            try
             {
-                return null;
+                var customers = await _customerRepository.GetListDataCustomer(request);
+                if (customers.Count == 0)
+                {
+                    return null;
+                }
+
+                var customersDtos = customers.Select(x => new CustomerResponseDTO
+                {
+                    id = x.Id,
+                    name = x.Name,
+                    email = x.Email,
+                    phone_number = x.PhoneNumber,
+                    created_at = x.CreatedAt.ToString("dd MMM yyyy HH:mm"),
+                    updated_at = x.UpdatedAt?.ToString("dd MMM yyyy HH:mm") ?? "-"
+                }).ToList();
+
+                return customersDtos;
             }
-
-            var customersDtos = customers.Select(x => new CustomerResponseDTO
+            catch (Exception ex)
             {
-                Id = x.Id,
-                Name = x.Name,
-                Email = x.Email,
-                PhoneNumber = x.PhoneNumber,
-                CreatedAt = x.CreatedAt.ToString("dd MMM yyyy HH:mm"),
-                UpdatedAt = x.UpdatedAt is null? x.UpdatedAt.Value.ToString("dd MMM yyyy HH:mm") : "-"
-            }).ToList();
 
-            return customersDtos;
+                throw ex;
+            }
+            
         }
 
         //public async Task<CustomerResponseDTO> GetCustomerById(int id)

@@ -34,13 +34,13 @@ namespace QwikkTechnicalTest.Services
 
                 var appointmentsDtos = appointments.Select(x => new AppointmentResponseDTO
                 {
-                    Id = x.Id,
+                    id = x.Id,
                     customer_name = x.Customer.Name,
                     appointment_date = x.AppointmentDate.ToString("dd MMM yyyy"),
                     appointment_time = x.AppointmentTime.ToString("HH:mm"),
                     status = x.Status.ToString(),
                     token = x.Token,
-                    CreatedAt = x.CreatedAt.ToString("dd MMM yyyy HH:mm"),
+                    created_at = x.CreatedAt.ToString("dd MMM yyyy HH:mm"),
                 }).ToList();
 
                 return appointmentsDtos;

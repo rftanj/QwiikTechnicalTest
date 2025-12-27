@@ -2,6 +2,6 @@
 {
     public class ListCustomerRequest
     {
-        public int? customer_id { get; set; }
+        public string? customer_id { get; set; }
     }
 }

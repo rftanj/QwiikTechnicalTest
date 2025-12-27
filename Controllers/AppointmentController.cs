@@ -62,7 +62,28 @@ namespace QwiikTechnicalTest.Controllers
             }
         }
 
+
+        /// <summary>
+        /// Get available appointment time slots for a specific date
+        /// </summary>
+        /// <remarks>
+        /// This endpoint always returns HTTP 200.
+        /// Business outcome is indicated by the 'status' field in the response body.
+        ///
+        /// Possible outcomes:
+        /// - status = true : Available slots are returned
+        /// - status = false : Request failed due to business validation
+        ///
+        /// Failure scenarios:
+        /// - Invalid date or non-working day
+        /// - No available appointment slots
+        /// - Unexpected system error
+        /// </remarks>
+        /// <response code="200">
+        /// Returns operation result wrapped in ApiResponse object.
+        /// </response>
         [HttpPost("schedule-appointment")]
+        [ProducesResponseType(typeof(List<GeneralResponse<AvailableTimeResponseDTO>>), StatusCodes.Status200OK)]
         public async Task<IActionResult> GetAvailableTime([FromBody] AvailableTimeRequestDTO appointment_date)
         {
             try

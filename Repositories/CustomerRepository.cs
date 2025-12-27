@@ -15,7 +15,7 @@ namespace QwiikTechnicalTest.Repositories
 
         public async Task<List<Customer>> GetListDataCustomer(ListCustomerRequest request)
         {
-            return await _context.Customers.Where(x => request.customer_id == null || x.Id == request.customer_id).ToListAsync();
+            return await _context.Customers.Where(x => string.IsNullOrEmpty(request.customer_id) || x.Id == Convert.ToInt32(request.customer_id)).ToListAsync();
         }
 
         public async Task<Customer?> GetCustomerByPhoneNumber(string phone_number)

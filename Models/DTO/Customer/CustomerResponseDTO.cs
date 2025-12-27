@@ -4,11 +4,11 @@ namespace QwiikTechnicalTest.Models.DTO.Customer
 {
     public class CustomerResponseDTO
     {
-        public int Id { get; set; }
-        public string Name { get; set; }
-        public string PhoneNumber { get; set; }
-        public string Email { get; set; }
-        public string CreatedAt { get; set; }
-        public string UpdatedAt { get; set; }
+        public int id { get; set; }
+        public string name { get; set; }
+        public string phone_number { get; set; }
+        public string email { get; set; }
+        public string created_at { get; set; }
+        public string updated_at { get; set; }
     }
 }

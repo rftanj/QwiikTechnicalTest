@@ -22,6 +22,7 @@ namespace QwiikTechnicalTest.Repositories
                       (string.IsNullOrEmpty(dto.customer_name) || x.Customer.Name.ToLower().Contains(dto.customer_name)) &&
                       (string.IsNullOrEmpty(dto.appointment_date) || x.AppointmentDate == DateTime.Parse(dto.appointment_date))
                 )
+                .OrderBy(x => x.AppointmentDate).ThenBy(x => x.AppointmentTime)
                 .ToListAsync();
 
             return datas;
