@@ -21,7 +21,28 @@ namespace QwiikTechnicalTest.Controllers
             _appointmentService = appointment;
         }
 
-
+        /// <summary>
+        /// Get list of appointments based on filter criteria.
+        /// </summary>
+        /// <remarks>
+        /// This endpoint retrieves appointment data based on optional filters:
+        /// - appointment_date
+        /// - customer_name
+        /// - status
+        ///
+        /// This endpoint always returns HTTP 200.
+        /// Business outcome is indicated by the 'status' field in the response body.
+        /// </remarks>
+        /// <param name="dto">Filter parameters for listing appointments</param>
+        /// <response code="200">
+        /// Returns appointment list when data exists, otherwise returns status false with message.
+        /// </response>
+        /// <response code="400">
+        /// Returns general error message when unexpected error occurs.
+        /// </response>
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(GeneralResponse<List<AppointmentResponseDTO>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GeneralResponse<string>), StatusCodes.Status400BadRequest)]
         [HttpPost("list-appointment")]
         public async Task<IActionResult> GetDataAppointment([FromBody] ListAppointmentRequestDTO dto)
         {
@@ -42,7 +63,31 @@ namespace QwiikTechnicalTest.Controllers
             }
         }
 
+        /// <summary>
+        /// Create a new appointment.
+        /// </summary>
+        /// <remarks>
+        /// This endpoint creates a new appointment for a customer.
+        /// 
+        /// Business rules:
+        /// - Appointment time must be within working hours
+        /// - Appointment slot must be available
+        /// - If the selected date is full, the appointment may be shifted to the next available date
+        /// 
+        /// This endpoint always returns HTTP 200.
+        /// Business outcome is indicated by the 'status' field in the response body.
+        /// </remarks>
+        /// <param name="dto">Appointment creation request data</param>
+        /// <response code="200">
+        /// Appointment created successfully or business validation failed.
+        /// </response>
+        /// <response code="400">
+        /// Unexpected system error.
+        /// </response>
         [HttpPost("create-appointment")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(GeneralResponse<string>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GeneralResponse<string>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> CreateAppointment([FromBody] AppointmentRequestDTO dto)
         {
             try
@@ -82,8 +127,12 @@ namespace QwiikTechnicalTest.Controllers
         /// <response code="200">
         /// Returns operation result wrapped in ApiResponse object.
         /// </response>
+        /// <response code="400">
+        /// Returns general error message when unexpected error occurs.
+        /// </response>
         [HttpPost("schedule-appointment")]
         [ProducesResponseType(typeof(List<GeneralResponse<AvailableTimeResponseDTO>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GeneralResponse<string>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetAvailableTime([FromBody] AvailableTimeRequestDTO appointment_date)
         {
             try

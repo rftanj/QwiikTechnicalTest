@@ -20,7 +20,27 @@ namespace QwiikTechnicalTest.Controllers
         }
 
 
+        /// <summary>
+        /// Get list of customers.
+        /// </summary>
+        /// <remarks>
+        /// This endpoint retrieves customer data based on optional filter:
+        /// - customer_id
+        ///
+        /// This endpoint always returns HTTP 200.
+        /// Business outcome is indicated by the 'status' field in the response body.
+        /// </remarks>
+        /// <param name="request">Filter parameters for listing customers</param>
+        /// <response code="200">
+        /// Returns customer list when data exists, otherwise returns status false with message.
+        /// </response>
+        /// <response code="400">
+        /// Returns general error message when unexpected error occurs.
+        /// </response>
         [HttpPost("list-customer")]
+        [Produces("application/json")]
+        [ProducesResponseType(typeof(GeneralResponse<List<CustomerResponseDTO>>), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GeneralResponse<string>), StatusCodes.Status400BadRequest)]
         public async Task<IActionResult> GetListDataCustomer([FromBody] ListCustomerRequest request)
         {
             try

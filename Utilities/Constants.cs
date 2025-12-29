@@ -11,5 +11,7 @@ namespace QwiikTechnicalTest.Utilities
         public static string CustomerNotFoundMsg = "Customer not found, please register customer first.";
         public static string InvalidAppointmentTime = "Invalid appointment time";
         public static string AppointmentTimeNotAvailable = "There is no appointment time available on {0}, please select another date.";
+        public static string LoginFailed = "Email and Password doesnt match.";
+        public static string LoginSuccess = "Login success.";
     }
 }

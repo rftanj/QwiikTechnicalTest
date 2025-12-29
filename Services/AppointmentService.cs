@@ -4,7 +4,9 @@ using QwiikTechnicalTest.Models.DB;
 using QwiikTechnicalTest.Models.DTO.Appointment;
 using QwiikTechnicalTest.Repositories;
 using QwiikTechnicalTest.Utilities;
+using System.Collections.Generic;
 using System.Reflection.Metadata.Ecma335;
+using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace QwikkTechnicalTest.Services
 {
@@ -12,14 +14,20 @@ namespace QwikkTechnicalTest.Services
     {
         private readonly AppointmentRepository _appointmentRepository;
         private readonly CustomerRepository _customerRepository;
+        private readonly UserRepository _userRepository;
         private readonly IConfiguration _configuration;
         private readonly int _maxAppointmentsPerDay;
-        public AppointmentService(AppointmentRepository appointment, CustomerRepository customerRepository, IConfiguration configuration)
+        private readonly string _pepper;
+        private readonly string _iteration;
+        public AppointmentService(AppointmentRepository appointment, UserRepository user, CustomerRepository customerRepository, IConfiguration configuration)
         {
             _appointmentRepository = appointment;
             _customerRepository = customerRepository;
+            _userRepository = user;
             _configuration = configuration;
             _maxAppointmentsPerDay = int.Parse(_configuration["MaxAppointmentsPerDay"]);
+            _pepper = configuration.GetSection("Security:Pepper").Value ?? "";
+            _iteration = configuration.GetSection("Security:Iteration").Value ?? "";
         }
 
         public async Task<List<AppointmentResponseDTO>> GetListDataAppointments(ListAppointmentRequestDTO dto)
@@ -142,6 +150,9 @@ namespace QwikkTechnicalTest.Services
                     PhoneNumber = appointment.phone_number,
                     CreatedAt = DateTime.UtcNow
                 });
+
+                //var isUserCreated = await createLoginUser(appointment);
+                //if (!isUserCreated) return 0;
             }
             else
             {
@@ -150,6 +161,21 @@ namespace QwikkTechnicalTest.Services
 
             return customer_id;
         }
+
+        //private async Task<bool> createLoginUser(AppointmentRequestDTO dto)
+        //{
+        //    var user = new User
+        //    {
+        //        Role = UserRole.Customer,
+        //        Email = dto.email,
+        //        Salt = Hasher.GenerateSalt(),
+        //        CreatedAt = DateTime.UtcNow
+        //    };
+
+        //    user.PasswordHash = Hasher.ComputeHash(dto.password, user.Salt, _pepper, Convert.ToInt32(_iteration));
+        //    var isSuccess = await _userRepository.CreateUserLogin(user);
+        //    return isSuccess;
+        //}
 
         private async Task<bool> isMaxAppointmentsReached(DateTime appointment_date)
         {
